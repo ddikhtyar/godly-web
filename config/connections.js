@@ -88,5 +88,23 @@ module.exports.connections = {
   * More adapters: https://github.com/balderdashy/sails                      *
   *                                                                          *
   ***************************************************************************/
+  firebase: {
+    adapter: 'sails-firebase',
+
+    credential: {
+      "type": "service_account",
+      "project_id": "godly-web",
+      "private_key_id": "9924f18108b1382bb0494330028ef7b3d70ae674",
+      "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCn3FXBPk4LwQtp\nFPBt794WB8if/MbFVI1zXMlCAy2JE7KClTvz9yb87p9P8u+meGQscl7WwckdNcl4\n92e6nCsDehOeKy0OX1bfgcD1frdJKkjgnRXdPQsAjHVwJ03cwa7fF71i16nSSzHV\nbCRLLuOrNx/lmt7sFaLjFKjJRl8OUOUZq8Ctdo+e4T7M7ItvG1HywoqjxQV5CVK2\nMjbjHqNFjTczorxxA2MMJuEhTJJPFnoLeLXQscBPkgeS58JeOvKuDCbKqkmGyqKl\nPaxoO4KLhTn5VqEK3vdfVJ8I44ADZclS7f5au1TfrWXFInvTCUrKR4Jc9ArKsfRq\n3JV3ol3pAgMBAAECggEACTrMvkziNrQ9H+CGXc0gHX79EYrxFP2Sr4KtEEOjd9OM\n77Ar9TykOKkYOmmlsrYQ7/6z50QNfl0sQEn+Op0GonDOblZ6aj1kxfJY/Uaj5lJ8\nYllQz/LgzX1roaiPl/FQX7Tq9WndTRJUYaNKFZY073+e8d2Dn2CLLcg/hZ2ocV17\nXmhrQ6pk/5PxlLh9CxCAC0etV1Oa0dI3dzSuhC69JKmUkVkltqGwBWljEzeOFOB4\n0QFZHd3q4FindKPbeUQ5wXfgKyEtgIIayuHURFkSO5Tgk7apqWdRmp6uD3x2f0ZN\n6S2dgefC1T48Pl5Z2MLhaBcOmh0fOnl04S1MDnR1+QKBgQDpYtTMLupT/BcGO0wF\n2pMpuOhuccMsirxou2uDh3E3/M+J0cnnLl9jXI52C6hSS02GC1jUWRzpVH9Iy3pg\nPJlUZQmdZ9aL9UeH1Z7UneziH9AOAlBYawj3pbgzkrDCR3cDVnMoA8xMtmypNG5C\nAL3Y6EcTZ72+QPJdEKaXUNr5HQKBgQC4ICOY4S2qEp09dYZlJU/9ncrc7qCv37Lf\n3JKlg7ocyinkuqJf/FDnfTKUmemjDV8xfS6vMIl0rOOojrantVBGCYZGQD2Vc7PR\ndgcfPvg72ZEABNxXnAlcneuDJHZyBZ4Oc0u5I8zFzr2O8um0ieMASec8Qdm+DnEZ\nok5X91tqPQKBgQDlsInDpgyiuUAjtuob/MDG2B+Qys+OH8BLxuCKIxtvQZUzi0+N\nAVuJm4btcI2o6EmUucgjvMwyayGWEAQRgLJal9G9o3tIZQ6QBdJ6aC7BYRPPJcHT\nMwwxRlyiDSV/HvxnQYa2A/7mJMeOQ3ab6MTvG7MPyxK3ko20v/VkiIPplQKBgAZ7\n+0TzCSyoIyl67hS5z6ta1z4YmUgYVLBVkESL8w34gKkxeW5v8Fl2q0VYdkXrvqJ7\nih1ZVD3rqMjS3dPiKsWMqFHpCUIuJPMHeRC8ovlYnCaoBSqAsEO2vAiOTC2PzRUt\nMkl+3UNKGJrkKx7UjE4CTEZu+0AaOhlxAdlPOMTxAoGAID42iCHZFaJtbjMiSEA5\nSGbPfwk3eOUDRl5C4WGSbLZqW9pJzbUudMYax1JwIgZbR+1xU50RGICyAFfgLYLd\n+364lr7PVJTaStTmjYkbXmmkNZKXqNKyjwM9R7s+kFlFqwZlu4kmyxNZwXF/nX0b\nepW3j6MpMoiwy0LbfqT760w=\n-----END PRIVATE KEY-----\n",
+      "client_email": "firebase-adminsdk-r9sed@godly-web.iam.gserviceaccount.com",
+      "client_id": "114107799441342369567",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://accounts.google.com/o/oauth2/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-r9sed%40godly-web.iam.gserviceaccount.com"
+    },
+
+    databaseURL: "https://godly-web.firebaseio.com",
+  },
 
 };

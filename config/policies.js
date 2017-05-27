@@ -25,8 +25,11 @@ module.exports.policies = {
   * access)                                                                  *
   *                                                                          *
   ***************************************************************************/
-
-  // '*': true,
+  '*': true,
+//Then let's bind the policy to the PostController by updating
+ 'PostController': {
+   '*': 'isAuthenticated'
+ },
 
   /***************************************************************************
   *                                                                          *
