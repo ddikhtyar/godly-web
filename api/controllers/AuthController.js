@@ -5,18 +5,26 @@ module.exports = {
         //Вызываем метод authenticate с LocalStrategy
         passport.authenticate('local', function(err, user, info) {
             if ((err) || (!user)) {
-                return res.send({
-                    message: info.message,
-                    user: user
-                });
+                return res.negotiate(err);
             }
             req.logIn(user, function(err) {
                 console.log('req.logIn');
-                if (err) res.send(err);
-                return res.send({
-                    message: info.message,
-                    user: user
-                });
+                if (err) return res.negotiate(err);
+                if(!!info.negotiate) return res.negotiate(err);
+                if(!!info.incorrect) return res.notFound();
+
+                if (user.deleted) {
+                  return res.forbidden("'Your account has been deleted.  Please visit http://brushfire.io/restore to restore your account.'");
+                }
+                if (user.banned) {
+                  return res.forbidden("'Your account has been banned, most likely for adding dog videos in violation of the Terms of Service.  Please contact Chad or his mother.'");
+                }
+
+                req.session.userId = user.id;
+                req.session.auth = true;
+                req.session.User = user;
+                
+                res.redirect('/');
             });
         })(req, res); //IMPORTANT: обращаем внимание на то, что мы вызываем authenticate('login', ...)(req,res);
         //Passport'у нужно получить значения логина\пароля с req.body

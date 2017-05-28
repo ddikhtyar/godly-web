@@ -10,15 +10,15 @@ var generator = require("../api/services/RandomGenService.js");
 //Чтобы добавить поддержку "login sessions"
 //нужно задать функции serialize\deserialize.
 passport.serializeUser(function(user, next) {
-    //console.log('passport.serializeUser');
+    console.log('passport.serializeUser');
     next(null, user.id);
 });
 
 passport.deserializeUser(function(id, next) {
     User
         .findOne({ id: id })
-        .done(function(error, user) {
-            //console.log('passport.deserializeUser id ' + id);
+        .exec(function(error, user) {
+            console.log('passport.deserializeUser id ' + id);
             next(error, user);
         });
 });
@@ -57,20 +57,12 @@ passport.use(new LocalStrategy({
               encryptedPassword: user.encryptedPassword
             }).exec({
               error: function(err) {
-                console.log(err);
-                next(error);
+                next(error, false, { negotiate:true, message: 'checkPassword throu ERROR' });
               },
               incorrect: function() {
-                console.log('Wrong password!');
-                next(null, false, { message: 'Wrong password' });
+                next(null, false, { incorrect:true,  message: 'Wrong password' });
               },
               success: function() {
-                if (user.deleted) {
-                  next(null, false, { message: 'Your account has been deleted.  Please visit godly-web/restore to restore your account.' });
-                }
-                if (user.banned) {
-                  next(null, false, { message: 'Your account has been banned, most likely for adding dog videos in violation of the Terms of Service.  Please contact Chad or his mother.' });
-                }
                 console.log('User founded.');
                 var returnUser = user.toJSON();
                 next(null, returnUser, { message: 'Logged In Successfully' });
