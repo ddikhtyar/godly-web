@@ -10,6 +10,7 @@ var Passwords = require('machinepack-passwords');
 var Gravatar = require('machinepack-gravatar');
 var Strings = require('machinepack-strings');
 var Mailgun = require('machinepack-mailgun');
+var passwordHash = require('password-hash');
 
 module.exports = {
 
@@ -47,8 +48,10 @@ module.exports = {
           if (createdUser.banned) {
             return res.forbidden("'Your account has been banned, most likely for adding dog videos in violation of the Terms of Service.  Please contact Chad or his mother.'");
           }
-
-          req.session.userId = createdUser.id;
+          var returnUser = user.toJSON();
+          req.session.userId = returnUser.id;
+          req.session.auth = true;
+          req.session.User = returnUser;
 
           return res.ok();
 

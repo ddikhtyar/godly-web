@@ -3,26 +3,21 @@ module.exports = {
 
     login: function(req, res, next) {
         //Вызываем метод authenticate с LocalStrategy
-        passport.authenticate('local', function(error, user, info) {
-              console.log('AuthController.login.assport.authenticate.local');
-              if ((error) || (!user)) {
-                  console.log(error);
-                  return res.send({
-                      message: info.message,
-                      user: user
-                  });
-              } else {
-                //Если все проверки прошли успешно
-                //То нужно вызвать метод login
-                //и передать объект нашего пользователя
-                req.login(user, function(error) {
-                  if (error) res.send(error);
-                  return res.send({
-                      message: info.message,
-                      user: user
+        passport.authenticate('local', function(err, user, info) {
+            if ((err) || (!user)) {
+                return res.send({
+                    message: info.message,
+                    user: user
                 });
-              });
             }
+            req.logIn(user, function(err) {
+                console.log('req.logIn');
+                if (err) res.send(err);
+                return res.send({
+                    message: info.message,
+                    user: user
+                });
+            });
         })(req, res); //IMPORTANT: обращаем внимание на то, что мы вызываем authenticate('login', ...)(req,res);
         //Passport'у нужно получить значения логина\пароля с req.body
     },

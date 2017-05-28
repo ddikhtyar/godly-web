@@ -3,7 +3,9 @@ var
     passport = require('passport'), //passport
     LocalStrategy = require('passport-local').Strategy, //Локальную стратегию
     RememberMeStrategy = require('passport-remember-me').Strategy, //Remember Me стратегию
-    passwordHash = require('password-hash');
+    passwordHash = require('password-hash'),
+    Passwords = require('machinepack-passwords')
+    ;
 var generator = require("../api/services/RandomGenService.js");
 //Чтобы добавить поддержку "login sessions"
 //нужно задать функции serialize\deserialize.
@@ -27,31 +29,54 @@ passport.use(new LocalStrategy({
         passwordField: 'password'
     },
     function(username, password, next) {
-        //console.log('LocalStrategy');
+        console.log('LocalStrategy... login-%s password-%s',username,password);
         //Ищем пользователя с введенным логином или email'ом
-        // User
-        //     .findOne()
-        //     .where({
-        //         or: [{
-        //             username: username
-        //         }, {
-        //             email: username
-        //         }]
-        //     },function(error, user) {
-        //         if (error) {
-        //             console.log(error);
-        //             next(error);
-        //         } else if (!user) {
-        //             next(null, false, { message: 'This user not exists' });
-        //         //} else if (!bcrypt.compareSync(password, user.password)) {
-        //         } else if (!passwordHash.verify(user.password,password)) {
-        //             next(null, false, { message: 'Wrong password' });
-        //         } else {
-        //             //вызываем внутренний метод для скрытия нежелательных полей
-        //             var returnUser = user.toJSON();
-        //             next(null, returnUser, { message: 'Logged In Successfully' });
-        //         }
-        //     });
+        // var myQuery = User.find();
+        // myQuery
+        // .where({
+        //     or: [
+        //       { email : username},
+        //       { username : username}
+        //     ]
+        // })
+        // .limit(1);
+        User
+          .findOne({id:'-KlDS_ANaTrvAD0YmpzH'})
+          .exec(function(error, user) {
+
+            if (error) {
+                console.log('EXEC ERROR!! ');
+                console.log(error);
+                next(error);
+            } else if (!user) {
+                next(null, false, { message: 'This user not exists' });
+            };
+
+            Passwords.checkPassword({
+              passwordAttempt: password,
+              encryptedPassword: user.encryptedPassword
+            }).exec({
+              error: function(err) {
+                console.log(err);
+                next(error);
+              },
+              incorrect: function() {
+                console.log('Wrong password!');
+                next(null, false, { message: 'Wrong password' });
+              },
+              success: function() {
+                if (user.deleted) {
+                  next(null, false, { message: 'Your account has been deleted.  Please visit godly-web/restore to restore your account.' });
+                }
+                if (user.banned) {
+                  next(null, false, { message: 'Your account has been banned, most likely for adding dog videos in violation of the Terms of Service.  Please contact Chad or his mother.' });
+                }
+                console.log('User founded.');
+                var returnUser = user.toJSON();
+                next(null, returnUser, { message: 'Logged In Successfully' });
+              }
+            });
+        });
     }
 ));
 
@@ -67,7 +92,7 @@ passport.use(new RememberMeStrategy({
             .where({
                 autoLoginHash: token
             })
-            .done(function(error, user) {
+            .exec(function(error, user) {
                 if (error) {
                     done(error);
                 } else if (!user) {

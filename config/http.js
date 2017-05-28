@@ -23,30 +23,40 @@ module.exports.http = {
 
   middleware: {
 
+    passportInit    : require('passport').initialize(),
+    passportSession : require('passport').session(),
+
+    // poweredBy: function(req, res, next) {
+    //   res.setHeader('X-Powered-By', "Autobots");
+    //   next();
+    // },
+
+    //compress: require('compression')(),
+
   /***************************************************************************
   *                                                                          *
   * The order in which middleware should be run for HTTP request. (the Sails *
   * router is invoked by the "router" middleware below.)                     *
   *                                                                          *
   ***************************************************************************/
-
-    // order: [
-    //   'startRequestTimer',
-    //   'cookieParser',
-    //   'session',
-    //   'myRequestLogger',
-    //   'bodyParser',
-    //   'handleBodyParserError',
-    //   'compress',
-    //   'methodOverride',
-    //   'poweredBy',
-    //   '$custom',
-    //   'router',
-    //   'www',
-    //   'favicon',
-    //   '404',
-    //   '500'
-    // ],
+    order: [
+      'startRequestTimer',
+      'cookieParser',
+      'session',
+      'passportInit',
+      'passportSession',
+      'myRequestLogger',
+      'bodyParser',
+      'handleBodyParserError',
+      'compress',
+      'methodOverride',
+      'poweredBy',
+      'router',
+      'www',
+      'favicon',
+      '404',
+      '500'
+    ],
 
   /****************************************************************************
   *                                                                           *
@@ -58,7 +68,6 @@ module.exports.http = {
     //     console.log("Requested :: ", req.method, req.url);
     //     return next();
     // }
-
 
   /***************************************************************************
   *                                                                          *
@@ -77,6 +86,8 @@ module.exports.http = {
 
     // bodyParser: require('skipper')({strict: true})
 
+    // Override the conventional cookie parser:
+    //cookieParser: function (req, res, next) { /*...*/ next(); },
   },
 
   /***************************************************************************
@@ -90,4 +101,6 @@ module.exports.http = {
   ***************************************************************************/
 
   // cache: 31557600000
+
+
 };

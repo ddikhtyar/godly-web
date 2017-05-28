@@ -5,8 +5,17 @@
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 module.exports = {
+  connection: 'firebase',
 
   attributes: {
+
+    createdAt: {
+      type: 'datetime'
+    },
+
+    updatedAt:{
+      type: 'datetime'
+    },
 
     email: {
       type: 'string',
