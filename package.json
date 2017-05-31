@@ -25,6 +25,7 @@
     "include-all": "^1.0.0",
     "machinepack-datetime": "1.4.0",
     "machinepack-emailaddresses": "0.4.0",
+    "machinepack-firebase": "3.1.0",
     "machinepack-gravatar": "1.2.0",
     "machinepack-mailgun": "0.6.0",
     "machinepack-passwords": "2.3.0",
@@ -38,6 +39,13 @@
     "sails": "~0.12.13",
     "sails-disk": "~0.10.9",
     "sails-firebase": "0.1.4"
+  },
+  "waterlineAdapter": {
+    "type": "sails-firebase",
+    "interfaces": [
+      "semantic","queryable"
+    ],
+    "waterlineVersion": "~0.12.1"
   },
   "scripts": {
     "debug": "node debug app.js",

@@ -30,18 +30,15 @@ passport.use(new LocalStrategy({
     },
     function(username, password, next) {
         console.log('LocalStrategy... login-%s password-%s',username,password);
-        //Ищем пользователя с введенным логином или email'ом
-        // var myQuery = User.find();
-        // myQuery
-        // .where({
-        //     or: [
-        //       { email : username},
-        //       { username : username}
-        //     ]
-        // })
-        // .limit(1);
-        User
-          .findOne({id:'-KlDS_ANaTrvAD0YmpzH'})
+        let query = User.findOne();
+        if(username.toString().indexOf('@') != -1){
+          query = query.where({ 'email' : username });
+        } else {
+          query = query.where({ 'username' : username });
+        }
+
+        //console.log(query);//тут можно посмотреть внутренности
+        query
           .exec(function(error, user) {
 
             if (error) {
@@ -60,6 +57,7 @@ passport.use(new LocalStrategy({
                 next(error, false, { negotiate:true, message: 'checkPassword throu ERROR' });
               },
               incorrect: function() {
+                console.log('Wrong password');
                 next(null, false, { incorrect:true,  message: 'Wrong password' });
               },
               success: function() {

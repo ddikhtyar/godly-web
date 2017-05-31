@@ -5,13 +5,14 @@ module.exports = {
         //Вызываем метод authenticate с LocalStrategy
         passport.authenticate('local', function(err, user, info) {
             if ((err) || (!user)) {
+                if(!!info.incorrect) return res.notFound("incorrect password!");
                 return res.negotiate(err);
             }
             req.logIn(user, function(err) {
                 console.log('req.logIn');
                 if (err) return res.negotiate(err);
                 if(!!info.negotiate) return res.negotiate(err);
-                if(!!info.incorrect) return res.notFound();
+                if(!!info.incorrect) return res.notFound("incorrect password!");
 
                 if (user.deleted) {
                   return res.forbidden("'Your account has been deleted.  Please visit http://brushfire.io/restore to restore your account.'");
@@ -23,7 +24,7 @@ module.exports = {
                 req.session.userId = user.id;
                 req.session.auth = true;
                 req.session.User = user;
-                
+
                 res.redirect('/');
             });
         })(req, res); //IMPORTANT: обращаем внимание на то, что мы вызываем authenticate('login', ...)(req,res);
