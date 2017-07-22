@@ -8,7 +8,8 @@
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.http.html
  */
-
+ // var session = require('express-session');
+ // var RedisStore = require('connect-redis')(session);
 module.exports.http = {
 
   /****************************************************************************
@@ -25,6 +26,9 @@ module.exports.http = {
 
     passportInit    : require('passport').initialize(),
     passportSession : require('passport').session(),
+    // passportRememberMe : require('passport').authenticate('remember-me'),
+    // expresssession : require('express-session'),
+    // redisStore : RedisStore,
 
     // poweredBy: function(req, res, next) {
     //   res.setHeader('X-Powered-By', "Autobots");

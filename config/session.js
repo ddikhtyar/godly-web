@@ -31,9 +31,9 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  // cookie: {
-  //   maxAge: 24 * 60 * 60 * 1000
-  // },
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000
+  },
 
   /***************************************************************************
   *                                                                          *
@@ -44,7 +44,7 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  // adapter: 'redis',
+
 
   /***************************************************************************
   *                                                                          *
@@ -54,13 +54,21 @@ module.exports.session = {
   * https://github.com/visionmedia/connect-redis                             *
   *                                                                          *
   ***************************************************************************/
-
+  // adapter: 'redis',
   // host: 'localhost',
   // port: 6379,
   // ttl: <redis session TTL in seconds>,
   // db: 0,
   // pass: <redis auth password>,
   // prefix: 'sess:',
+
+  // host: '50.30.35.9',
+  // port: 3134,
+  // db: 0,
+  // pass: '5acaeac0ac15501c22889c5840c252ab',
+  // prefix: 'sess:',
+  // ttl: 0, // session timeout. 0=forever
+  // url: 'redis://ddikhtyar:5acaeac0ac15501c22889c5840c252ab@50.30.35.9:3134/'
 
 
   /***************************************************************************
@@ -74,8 +82,8 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  // adapter: 'mongo',
-  // url: 'mongodb://user:password@localhost:27017/dbname', // user, password and port optional
+  adapter: 'mongo',
+  url: 'mongodb://godly-su:fanera@ds111882.mlab.com:11882/auth-sessions', // user, password and port optional
 
   /***************************************************************************
   *                                                                          *

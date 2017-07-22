@@ -1,7 +1,22 @@
-<h1>Signup</h1>
-<form method="POST" action="/signup">
-  <input type="text" caption="username" name="username">
-  <input type="email" caption="email" name="email">
-  <input type="password" caption="password" name="password">
-  <input type="submit" value="submit">
-</form>
+<div class="container">
+	<div class="row">
+		<div class="col-md-4"></div>
+		<div class="col-md-4">
+			<div class="panel panel-default">
+        <div class="panel-heading">Signup</div>
+				<div class="panel-body">
+					<form action="/signup" method="post">
+						<input type="text" name="username" placeholder="Имя Пользователя"><br>
+            <input type="text" name="email" placeholder="email"><br>
+						<input type="password" name="password" placeholder="Пароль"><br>
+						<!-- <input type="hidden" name="_csrf" value="<%= _csrf %>">-->
+						<!-- Поле которое можно удалить после создания администратора -->
+            <hr></hr/>
+						<input type="submit" class="btn btn-success btn-block" value="Зарегистрироваться">
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4"></div>
+	</div>
+</div>

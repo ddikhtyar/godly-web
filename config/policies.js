@@ -25,11 +25,22 @@ module.exports.policies = {
   * access)                                                                  *
   *                                                                          *
   ***************************************************************************/
-  '*': true,
-//Then let's bind the policy to the PostController by updating
- 'PostController': {
-   '*': 'isAuthenticated'
- },
+  '*': false,
+  '/': true,
+  'UserController': {
+    'find': ['isAuthenticated'],
+    'findOne': ['isAuthenticated'],
+    'create': ['isAuthenticated','isAdmin'],
+    'update': ['isAuthenticated','isOwner'],
+    'destroy': ['isAuthenticated','isAdmin'],
+    'signup':'isLoggedOut'
+  },
+  'AuthController': {
+    '*': true
+  },
+   'PostController': {
+     '*': 'isAuthenticated'
+   },
 
   /***************************************************************************
   *                                                                          *

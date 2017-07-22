@@ -48,6 +48,8 @@ module.exports.routes = {
     view: 'signup'
   },
 
+  'get /checkjwt': 'AuthController.checkjwt',
+
   'post /signup': 'UserController.signup'
 
   /***************************************************************************

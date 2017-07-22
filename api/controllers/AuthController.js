@@ -1,8 +1,15 @@
 var passport = require('passport');
-module.exports = {
+var generator = require("../services/RandomGenService.js");
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt; // авторизация через JWT
+const jwt = require('jsonwebtoken'); // аутентификация по JWT для hhtp
+const jwtsecret = '0424c9e5c320f6255d27dda80f752c73';
+// const jwtsecret = process.env.tokenSecret || '0424c9e5c320f6255d27dda80f752c73';
 
+module.exports = {
     login: function(req, res, next) {
         //Вызываем метод authenticate с LocalStrategy
+        var remember_me = req.param('remember_me');
         passport.authenticate('local', function(err, user, info) {
             if ((err) || (!user)) {
                 if(!!info.incorrect) return res.notFound("incorrect password!");
@@ -22,9 +29,31 @@ module.exports = {
                 }
 
                 req.session.userId = user.id;
-                req.session.auth = true;
+                req.session.authenticated = true;
                 req.session.User = user;
+                req.body = {user: user};
+                console.log('req.body:');
+                console.log(req.body);
+                console.log('remember_me:' + remember_me);
 
+
+                if (!!remember_me && remember_me=='on') {
+
+                    const token_jwt = jwt.sign(user, jwtsecret); //здесь создается JWT
+                    console.log('token_jwt: ');
+                    console.log(token_jwt);
+                    User
+                      .update({id:user.id},{autoLoginHash:token_jwt})
+                      .exec(function afterwards(err, updated) {
+                          if (err) {
+                            next(err, false, { incorrect:true, message: 'autoLoginHash throu ERROR' });
+                          }
+                          if (!updated) {
+                            next(null, false, { incorrect:true,  message: 'autoLoginHash expired!' });
+                          }
+                          console.log('Updated user to have autoLoginHash ' + updated[0].autoLoginHash);
+                      });
+                }
                 res.redirect('/');
             });
         })(req, res); //IMPORTANT: обращаем внимание на то, что мы вызываем authenticate('login', ...)(req,res);
@@ -33,11 +62,34 @@ module.exports = {
 
     logout: function(req, res, next) {
         //Чистим куки с нашим token'ом
-        res.clearCookie('token');
+        res.clearCookie('remember_me');
+        delete req.session.userId;
+        delete req.session.User;
+        req.session.authenticated = false;
         req.logout();
         res.redirect('/');
     },
 
+    checkjwt:function(req,res,next){
+      console.log("checkjwt IN....");
+      passport.authenticate('jwt', function (err, user) {
+        console.log("user:");
+        console.log(user);
+        if (!!user) {
+          let user4tb = User.formatForTopbar(user);
+          console.log("hello " + (!!user4tb.firstName ? user4tb.fullName : user4tb.username));
+          return res.ok({
+            user: user
+          });
+        } else if (!!err) {
+          console.log(err);
+          return res.serverError(err);
+        } else {
+          console.log("Token not finded!")
+          return res.forbidden({ negotiate:true, message: 'Token not finded!' });
+        }
+      } )(req, res);
+    },
 
     // http://developer.github.com/v3/
     // http://developer.github.com/v3/oauth/#scopes

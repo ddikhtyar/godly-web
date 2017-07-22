@@ -43,15 +43,18 @@ module.exports = {
     },
 
     deleted: {
-      type: 'boolean'
+      type: 'boolean',
+      defaultsTo: false
     },
 
     admin: {
-      type: 'boolean'
+      type: 'boolean',
+      defaultsTo: false
     },
 
     banned: {
-      type: 'boolean'
+      type: 'boolean',
+      defaultsTo: false
     },
 
     passwordRecoveryToken: {
@@ -93,7 +96,7 @@ module.exports = {
       via: 'sender'
     },
 
-    autoLoginHash: {type: "string"},
+    autoLoginHash: {type: 'string'},
 
     toJSON: function() {
       var obj = this.toObject();
@@ -136,7 +139,7 @@ module.exports = {
         email: loggedInUserMaybe.email,
         isLoggedIn: true,
         username: loggedInUserMaybe.username,
-        fullName: loggedInUserMaybe.firstName + loggedInUserMaybe.lastName,
+        fullName: loggedInUserMaybe.firstName + ' ' +loggedInUserMaybe.lastName,
         gravatarURL: loggedInUserMaybe.gravatarURL
       };
     }

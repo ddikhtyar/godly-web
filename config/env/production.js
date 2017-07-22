@@ -35,4 +35,12 @@ module.exports = {
   //   level: "silent"
   // }
 
+  // session:	{
+  //     adapter:	'redis',
+  //     url:	'redis://ddikhtyar:5acaeac0ac15501c22889c5840c252ab@50.30.35.9:3134/'
+  // },
+  // sockets:	{
+  //   adapter:	'socket.io-redis',
+  //   url:	'redis://ddikhtyar:5acaeac0ac15501c22889c5840c252ab@50.30.35.9:3134/'
+  // },
 };

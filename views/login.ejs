@@ -1,6 +1,17 @@
-<h1>Login</h1>
-  <form method="POST" action="/login">
-  <input type="text" name="email">
-  <input type="password" name="password">
-  <input type="submit" value="submit">
-</form>
+<div class="container">
+	<div class="row">
+		<div class="col-md-4"></div>
+		<div class="col-md-4 text-center">
+			<h2>Авторизация</h2><hr>
+			<form action="/login" method="POST">
+				<input type="text" name="email" placeholder="Имя Пользователя или email" class="form-control" /><br>
+				<input type="password" name="password" placeholder="password" class="form-control" /><br>
+        <input type="checkbox" name="remember_me" placeholder="запомнить" /><label>запомнить</label>
+        <hr></hr/>
+        <input type="submit" class="btn btn-success btn-block" value="Войти" />
+				<!-- <input type="hidden" name="_csrf" value="<%= _csrf %>">-->
+			</form>
+		</div>
+		<div class="col-md-4"></div>
+	</div>
+</div>

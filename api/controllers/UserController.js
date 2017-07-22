@@ -11,70 +11,12 @@ var Gravatar = require('machinepack-gravatar');
 var Strings = require('machinepack-strings');
 var Mailgun = require('machinepack-mailgun');
 var passwordHash = require('password-hash');
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt; // авторизация через JWT
+const jwt = require('jsonwebtoken'); // аутентификация по JWT для hhtp
+const jwtsecret = '0424c9e5c320f6255d27dda80f752c73';
 
 module.exports = {
-
-  login: function(req, res) {
-    console.log('UserController.login');
-    User.findOne({
-      or: [{
-        email: req.param('email')
-      }, {
-        username: req.param('username')
-      }]
-    }, function foundUser(err, createdUser) {
-      if (err) return res.negotiate(err);
-      if (!createdUser) return res.notFound();
-
-      Passwords.checkPassword({
-        passwordAttempt: req.param('password'),
-        encryptedPassword: createdUser.encryptedPassword
-      }).exec({
-
-        error: function(err) {
-          return res.negotiate(err);
-        },
-
-        incorrect: function() {
-          return res.notFound();
-        },
-
-        success: function() {
-
-          if (createdUser.deleted) {
-            return res.forbidden("'Your account has been deleted.  Please visit http://brushfire.io/restore to restore your account.'");
-          }
-
-          if (createdUser.banned) {
-            return res.forbidden("'Your account has been banned, most likely for adding dog videos in violation of the Terms of Service.  Please contact Chad or his mother.'");
-          }
-          var returnUser = user.toJSON();
-          req.session.userId = returnUser.id;
-          req.session.auth = true;
-          req.session.User = returnUser;
-
-          return res.ok();
-
-        }
-      });
-    });
-  },
-
-  logout: function(req, res) {
-
-    User.findOne(req.session.userId, function foundUser(err, user) {
-      if (err) return res.negotiate(err);
-      if (!user) {
-        sails.log.verbose('Session refers to a user who no longer exists.');
-        return res.redirect('/');
-      }
-
-      // log the user-agent out.
-      req.session.userId = null;
-
-      return res.ok();
-    });
-  },
 
   signup: function(req, res) {
 
@@ -167,8 +109,19 @@ module.exports = {
                 return res.negotiate(err);
               }
 
+              var user = createdUser.toJSON();
+
               // Log the user in
-              req.session.userId = createdUser.id;
+              req.session.userId = user.id;
+              req.session.authenticated = true;
+              req.session.User = user;
+              req.body = {user: user};
+
+              const token_jwt = jwt.sign(user, jwtsecret); //здесь создается JWT
+
+              User
+                .update({id:user.id},{autoLoginHash:token_jwt})
+                .exec(function afterwards(err, updated) {});
 
               return res.json({
                 username: createdUser.username

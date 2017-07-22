@@ -1,7 +1,13 @@
-module.exports = function isAdmin(req, res, next) {
+module.exports = function isOwner(req, res, next) {
+  let prms = req.query || req.allParams();
+  // console.log('isOwner.js EXECUTE....');
+  // console.log('req.session.userId=' + req.session.userId);
+  // console.log('prms:');
+  // console.log(prms);
+  //
 
   // If the user agent DOES NOT have a user id stored in their session...
-  if (!req.session.userId) {
+  if (!req.session.userId && prms=={}) {
     if (req.wantsJSON) {
       return res.forbidden('You are not permitted to perform this action.');
     }
@@ -20,12 +26,20 @@ module.exports = function isAdmin(req, res, next) {
       if (req.wantsJSON) {
         return res.forbidden('You are not permitted to perform this action.');
       }
-      return res.redirect('/');
+      // console.log('!foundUser');
+      return res.forbidden('You are not permitted to perform this action.');
     }
+    //
+    // console.log('foundUser:');
+    // console.log(foundUser);
 
-    // If the found user record's admin property is true go to the action
-    if (foundUser.admin) {
-      // console.console.log('admin defined');
+    //
+    if (
+         (foundUser.id == prms.id)
+      || (foundUser.username == (prms.user || prms.username))
+      || (foundUser.email == (prms.user || prms.email))
+    ) {
+      // console.log('Owner defined');
       return next();
 
     // Respond with forbidden or redirect based upon the user-agent requirements
@@ -33,7 +47,7 @@ module.exports = function isAdmin(req, res, next) {
       if (req.wantsJSON) {
         return res.forbidden('You are not permitted to perform this action.');
       }
-      return res.redirect('/');
+      return res.forbidden('You are not permitted to perform this action.');
     }
   });
 };
